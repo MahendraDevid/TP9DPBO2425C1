@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pembalap — Daftar</title>
+  <style>
+    :root{
+      --bg: #f7f8fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #2563eb; /* Biru untuk Pembalap */
+      --accent-hover: #1d4ed8;
+      --danger: #ef4444;
+      --border: #e6e9ef;
+      --radius: 8px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: light;
+    }
+
+    body { background-color: var(--bg); margin: 0; padding: 0; color: #1f2937; }
+    .container { max-width: 980px; margin: 40px auto; padding: 0 20px; }
+
+    /* --- Navigation Tabs --- */
+    .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .nav-link { text-decoration: none; color: var(--muted); padding: 10px 16px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: all 0.2s; }
+    .nav-link:hover { background-color: #e5e7eb; color: #374151; }
+    
+    /* Tab Aktif (Biru) */
+    .nav-link.active { background-color: white; color: var(--accent); box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid var(--border); }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+
+    .header-content { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    h1 { margin: 0; font-size: 20px; font-weight: 700; color: #111827; }
+
+    /* Table Styles */
+    .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead { background-color: #f9fafb; }
+    th { text-align: left; padding: 12px 16px; font-weight: 600; color: var(--muted); text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; }
+    td { padding: 16px; border-top: 1px solid var(--border); vertical-align: middle; }
+    tr:hover td { background-color: #f9fafb; }
+
+    .col-id { width: 50px; text-align: center; color: var(--muted); font-weight: bold; }
+    .col-actions { text-align: right; white-space: nowrap; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; padding: 8px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; text-decoration: none; cursor: pointer; border: none; }
+    
+    .btn-edit { background: transparent; color: var(--accent); margin-right: 8px; }
+    .btn-edit:hover { text-decoration: underline; }
+    
+    .btn-delete { background: transparent; color: var(--danger); }
+    .btn-delete:hover { text-decoration: underline; }
+
+    .btn-add { background-color: var(--accent); color: white; padding: 10px 18px; font-weight: 600; }
+    .btn-add:hover { background-color: var(--accent-hover); }
+
+    .footer-info { margin-top: 20px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="nav-tabs">
+        <a href="index.php" class="nav-link active">Pembalap</a>
+        <a href="index.php?nav=mobil" class="nav-link">Mobil Balap</a>
+    </div>
+
+    <div class="card">
+      <div class="header-content">
+        <h1>Daftar Pembalap</h1>
+      </div>
+
+      <div class="table-responsive">
+        <table role="table">
+          <thead>
+            <tr>
+              <th class="col-id">No</th>
+              <th>Nama</th>
+              <th>Tim</th>
+              <th>Negara</th>
+              <th>Poin</th>
+              <th>Menang</th>
+              <th class="col-actions">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PHP will inject rows here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center">
+        <div class="footer-info">Total:</div>
+        <div>
+          <a href="index.php?screen=add" class="btn btn-add">+ Tambah Pembalap</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('click', function(e){
+      var d = e.target.closest && e.target.closest('.btn-delete');
+      if(!d) return;
+      var id = d.getAttribute('data-id');
+      if(!id) return;
+      var ok = confirm('Yakin ingin menghapus entri #' + id + '?');
+      if(!ok) return;
+      
+      var form = document.createElement('form');
+      form.method = 'GET';
+      form.action = 'index.php';
+      
+      var actionInput = document.createElement('input');
+      actionInput.type = 'hidden';
+      actionInput.name = 'action';
+      actionInput.value = 'delete';
+      form.appendChild(actionInput);
+      
+      var idInput = document.createElement('input');
+      idInput.type = 'hidden';
+      idInput.name = 'id';
+      idInput.value = id;
+      form.appendChild(idInput);
+      
+      document.body.appendChild(form);
+      form.submit();
+    });
+  </script>
+</body>
+</html>

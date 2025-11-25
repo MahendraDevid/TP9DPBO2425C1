@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mobil — Garasi Tim</title>
+  <style>
+    :root{
+      --bg: #f7f8fb;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent: #10b981; /* Hijau Emerald (pembeda dengan Pembalap Biru) */
+      --danger: #ef4444;
+      --border: #e6e9ef;
+      --radius: 8px;
+      --pad: 14px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color-scheme: light;
+    }
+
+    html,body{height:100%;margin:0;background:var(--bg);}
+    .container{max-width:980px;margin:36px auto;padding:18px;}
+
+    /* --- Navigation Tabs (Agar bisa pindah menu) --- */
+    .nav-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+    .nav-link { text-decoration: none; color: var(--muted); padding: 8px 12px; border-radius: 6px; font-size: 14px; font-weight: 500; }
+    .nav-link:hover { background: #e5e7eb; }
+    .nav-link.active { background: var(--card); color: var(--accent); box-shadow: 0 1px 2px rgba(16,24,40,0.03); border: 1px solid var(--border); }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:12px;
+      box-shadow: 0 1px 2px rgba(16,24,40,0.03);
+    }
+
+    h1{margin:0 0 12px 0;font-size:18px}
+    
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    thead th{ text-align:left;padding:12px 10px;background:transparent;color:var(--muted);font-weight:600;border-bottom:1px solid var(--border)}
+    tbody td{padding:12px 10px;border-bottom:1px solid var(--bg);vertical-align:middle}
+    tbody tr:last-child td{border-bottom:0}
+
+    .col-id{width:48px;color:var(--muted);}
+    .col-actions{width:170px;text-align:right}
+
+    /* Style Button Disamakan dengan Pembalap */
+    .btn{
+      display:inline-block;padding:8px 10px;border-radius:6px;border:1px solid transparent;font-size:13px;cursor:pointer;text-decoration:none;
+    }
+    
+    /* Tombol Edit & Hapus jadi Transparan (Teks only) */
+    .btn-edit{background:transparent;color:var(--accent);border-color:transparent}
+    .btn-delete{background:transparent;color:var(--danger);border-color:transparent;margin-left:8px}
+
+    /* Tombol Tambah Solid */
+    .btn-add{background:var(--accent);color:#fff;border:none;padding:10px 14px;border-radius:8px;display:inline-flex;align-items:center;gap:8px}
+
+    @media (max-width:640px){
+      thead th:nth-child(4), tbody td:nth-child(4), thead th:nth-child(5), tbody td:nth-child(5) {display:none}
+      .col-actions{width:130px}
+      .container{padding:10px;margin:18px}
+    }
+    
+    tbody tr:hover td{background:linear-gradient(90deg, rgba(16, 185, 129, 0.05), transparent)}
+  </style>
+</head>
+<body>
+  <div class="container">
+    
+    <div class="nav-tabs">
+        <a href="index.php" class="nav-link">Pembalap</a>
+        <a href="index.php?nav=mobil" class="nav-link active">Mobil Balap</a>
+    </div>
+
+    <div class="card">
+      <h1>Garasi Tim (Daftar Mobil)</h1>
+
+      <div style="overflow:auto;">
+        <table role="table" aria-label="Daftar Mobil">
+          <thead>
+            <tr>
+              <th class="col-id">No</th>
+              <th>Nama Chassis</th>
+              <th>Mesin</th>
+              <th>Top Speed</th>
+              <th>Berat</th>
+              <th class="col-actions">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- PHP will inject rows here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center">
+        <div style="color:var(--muted);font-size:13px">Total:</div>
+        <div>
+          <a href="index.php?nav=mobil&screen=add" class="btn btn-add" id="btn-add">+ Tambah Mobil</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('click', function(e){
+      var d = e.target.closest && e.target.closest('.btn-delete');
+      if(!d) return;
+      var id = d.getAttribute('data-id');
+      if(!id) return;
+      var ok = confirm('Yakin bongkar mobil #' + id + '?');
+      if(!ok) return;
+      
+      var form = document.createElement('form');
+      form.method = 'GET';
+      form.action = 'index.php';
+      
+      var navInput = document.createElement('input');
+      navInput.type = 'hidden';
+      navInput.name = 'nav';
+      navInput.value = 'mobil';
+      form.appendChild(navInput);
+
+      var actionInput = document.createElement('input');
+      actionInput.type = 'hidden';
+      actionInput.name = 'action';
+      actionInput.value = 'delete';
+      form.appendChild(actionInput);
+      
+      var idInput = document.createElement('input');
+      idInput.type = 'hidden';
+      idInput.name = 'id';
+      idInput.value = id;
+      form.appendChild(idInput);
+      
+      document.body.appendChild(form);
+      form.submit();
+    });
+  </script>
+</body>
+</html>
